@@ -1,0 +1,380 @@
+# mcsed2 update log
+
+2016-12-02:
+SP/clbwcombine.cl	copied. ! need to clean the content of SP/ !
+SP/dcrmap.cl     	A bug fix: applied.
+
+SP/mcswlcalib.cl	Slit detection parameters are changed for Jband sky. this need to be adjustable. 
+
+
+2016-12-02:
+sectcombsub.cl ... Now accepts "@" format. Output file name is foced to "l"//inimg. For the list input, "l"//inlist is made.
+
+configpars.cl  	   configuration parameters are stored.
+mcsgeocor.cl and dmosimg.cl are changed to use the configpars pset.
+
+
+2016-12-26:
+all *oct16* masks in MASK/ .... updated due to the need for more mask regions at the edge.
+
+
+2016-12-28:
+qobjmask.cl	just minor revision.
+
+
+2016-12-29:
+mcsimsurfit.cl	changed to use the pset parameter for mask name input. The parameters func and cross_terms are added. Also, a swith to apply patch to the vignetting area on channel 2 (upper right edge) is added.
+
+allskysub.cl	New. this task performs the three step of the sky subtraction. One is the master sky subtraction. Then subsequently the fitting sky subtraction. Then finally median sky subtraction for each frames. 
+
+lcpatsub.cl	New. This task performs 2+1 column & line pattern subtraction using the tasks sectcombsub.cl, colpatsub.cl and the optional commonpatsub.cl.
+
+psfestimate.cl	copied from old mcsred.
+
+2017-1-1:
+statcheck.cl	The old mcsimstat.cl is renamed, as its parameter file conflict with mcsimsurfit.cl. 
+
+commonpatsub.cl	Changed to use the pset parameter.
+
+2017-1-2:
+mcsall.cl	All-in-one task for data reduction. The sky subtraction part of the task has changed a lot from the old mcsall.cl.
+
+*** A lot of minor change has done to many tasks (sbselfsky.cl, mcsimsurfit.cl, dmosimg.cl, allskysub.cl etc.)
+
+
+2017-01-04 	MCSRED2 opened.
+
+2017-01-04
+gsextcat.cl	COADD value (ncoadd) is removed.
+
+
+2017-01-13
+imcheck.cl	update for the data with K_NEXPOSURE >1.
+
+mcsimsurfit.l   "rail" option is added.
+
+colpatsub.cl,lcpatsub.cl     rail and rsize parameters are added.
+
+sectcombsub.cl	configpars, rail, rsize parameters are added.
+
+mcsall.cl	The above changes for mcsimsurfit.cl, lcpatsub.cl are applied 
+		 here.  Note that the rail size applied in mcsall is 5 pixel 
+		 smaller than the one spcified by mcsall parameter.
+
+
+2017-01-20
+qobjmask.cl	Parameters rail and rsize are added. The imsurfit part is 
+		replaced to mcsimsurfit for the surface fitting process.
+
+mcsall.cl	The above change is incorporated into the task.
+
+
+2017-01-24 
+invmask.cl	The process of making new flat frame is chanced to option.
+		The exposure map image name is removed from the input list.
+		The normalize region is changed for consistency with mkdome.cl.
+		Some minor change.
+
+	The updated version release.
+
+
+March-Apr 2017 ... updated below. 
+gmkgtrimages.cl	       just minor. default tolerance parameter is changed.
+mcssetwcs.cl	       just minor. size of ln_id[] is changed.
+
+mcsimsurfit.cl	Use object-filling by 0 instad of fixpix. The parapmeters rail and rsize are added.
+
+allskysub.cl	The parapmeters rail and rsize are added, following the change of mcsimsurfit task.
+
+lcpatsub.cl	A bug fix on commonpatsub.cl (adding rail and rsize parameters).
+
+
+2017-04-07
+clean2nd.cl	Rewritten for numoircs. Added to the mcsred.cl.
+
+sectcombsub.cl  A minor update for the case there is no BPM.
+colpatsub.cl  	A minor update for the case there is no BPM.
+commonpatsub.cl A minor update for the case there is no BPM.
+
+
+2017-04-08
+mcsall.cl	A change at step 2: now writes the name of raw image used to 
+		  the keyword "USED_RAW". We use the keyword on invmask.cl. 
+		  And also, the parameter for "second" is added to simplify 
+		  the 2nd-path process.
+
+invmask.cl	A bug fix. The name of the raw image for new object mask is 
+		  now from the keyword "USED_RAW", in order to work for 
+		  NEXPOSURE>1 data.
+		The "disp" parameter is added.
+
+2017-04-26
+	The updated version release.
+
+==========
+2017-05-15
+mcsall.cl, qobjmask.cl	
+	   	... The handling of the raw data is changed. When the raw data 
+		is in the current directory, it is changed to "MCSR*fits".
+
+invmask.cl	The case with different xy dimension in now treated properly.
+
+The updated version release.
+==========
+
+A bug is discovered in invmask.cl! revise again...
+invmask.cl: 	    A bug fix related to the failure of making mask when the sky is negative value.
+
+update release as 2017-05-15 v2...
+==========
+2017-05-17
+mcsimsurfit.cl	Just minor change: "mode" to "midpt" for sky statistics.
+
+lcpatsub.cl	Step4 (final sky subtraction) is added. Some minor change.
+
+commonpatsub.cl      Just minor format change.
+
+update release as 2017-05-17
+==========
+mcssetwcs.cl:	  The parameters inref & units are added to allow the user-input catalog. The 1st and 2nd columns have to be RA & Dec for user input catalog.
+
+
+2017-08-24
+commonpatsub.cl:  The tanzaku combine algorithm has changed from median
+     		      to average; this gives much better result.
+
+colpatsub.cl  	A minor update: use niter=5 (was 3) for sky estimation.
+
+
+2017-08-25
+mcssetwcs.cl	A bug fix: ra dec re-conversion was not properly treated
+		   for the user-supplied catalog case.
+
+
+2017-08-30
+combnexp.cl	The "bs"//output list file is also generated for the mcsall task.
+
+channelstat.cl 	previous mcsimstat.cl task. Copied from old MCSRED but 
+		   renamed, because the uparm parameter confuses this with
+		   mcsimsurfit.
+
+gsextcat.cl	The "bad" parameter is added for poor seeing case.
+
+
+
+2017-09-04
+gmkgtrimages.cl: A bug fix. It did not work for the case with skipping images 
+		 due to no catalogued objects.
+
+
+2017-09-23
+getmatphot.cl	It stops if output file exists.
+
+2017-10-28
+gsextcat.cl     Just minor format re-arrange.
+
+
+2017-11-25
+commonpatsub.cl	   Some imdelete and delete process do not work by unknown 
+		   reason. Re-written at later part just works. Why?
+
+lcpatsub.cl	   changing midpt -> mode for sky estimate.
+
+mcsall.cl 	   In process 4, constant sky subtraction process is added 
+		   to the exelc=no case.
+
+update release as 2017-11-25
+==========
+
+2017-11-29
+invmask.cl	The checking sequence for the new mask, as well as the inter parameter, is added (run with inter=yes).
+
+mcsall.cl, lcpatsub.cl
+		Slight change of the sky estimation parameters. minor.
+
+
+2017-12-14: 
+combnexp.cl	If K_NEXPOS=0 (=TEST), stops the task.
+	 	The n1 parameter that defines the first id of the
+                 post-combine image is added.
+mcsall.cl 	The n1 parameter for combnexp (step 0) is added.
+
+
+2017-12-15: 
+imql.cl		Newly added in ETC/mcsfcs2/. This is MOIRCS on-site Imaging Data Quick-Look Reduction task.
+
+lsalign.cl      in ETC/. Update for the slit channel selection.
+
+2018-01-03
+cfichi.cl	New task for on-site quick image ckeck. This is similar to 
+		 cf.cl but it works for the data with NEXPOSURE>1.
+
+2018-02-28
+imql.cl		The "rail" parameter is added.
+
+
+2018-05-28
+wcsmosaic.cl	New task. Combining images using the wcs info in the header. 
+		Requires the artdata package. 
+		The wcs in the header have to be accurate.
+		Check the size of the result image and its cenetr coordinate 
+		 beforehand. And also, correct the zero point difference among
+		 the input data beforehand.
+
+2018-09-07
+specskysub.cl	Put in SP/. Combining B-position data for sky and subtract it.
+
+mcsspec.cl	In SP/. The root task to install all spec data reduction task.
+
+
+2018-09-12
+revise_sp.log	The separated update log for the tasks in SP/ directory.
+
+
+2018-09-22
+channelstat.cl	Deleted from the directory as well as mcsred.cl (as it is 
+		  duplicated with statcheck.cl).
+
+mkdistmask.cl	It is copied from the old MCSRED and updated to allow using 
+		   configpars.  Note that the task "mkdistmask.cl" can 
+		   specify .dbs and .gmp file while this task can only use 
+		   to do distortion correction.
+
+mcsgeocorr.cl 	If mask name in the header is specific to the image (not
+		  omsk* nor objmask*) it is also distortion corrected and 
+		  attached to the header.
+
+
+2018-10-17
+sccalc.cl	The stasec parameter is added.
+
+gmkgtrimages.cl The interpolation function for the data is changed from 
+		  "poly5" to "linear". And also, the 1-pixel radius addition 
+		  is added to the imreplace part of the mask.
+		  
+allskysub.cl	A bug fix. The case with different exposure time is now 
+		  appropriately scaled.
+
+
+2018-10-18
+focmeasure.cl  New task for operation in MCSRED2/ETC/mcsfcs2/. IRAF version of 
+	       	   the mcsfcs task.
+
+2018-10-25
+mcsgeocorr.cl	A Bug fix. hedit was missing on crrej+ part.
+
+
+2018-10-26
+gsextcat.cl	The "delbad" parameter is added to enable non-filtering.
+
+randaperr.cl	The "iter" parameter is added to do 3-sigma clipping of the catalog.
+
+2018-11-13
+gsextcat.cl	minor: gofilt.awk is deleted when delbad=no.
+
+mcsall.cl	The three new tasks for nodding data reduction (below) are added.
+
+# new tasks for nodding data reductions...
+nodseplist.cl	This task separates the input list from listprep.cl into 
+		     the object data and the sky data.
+	K_DITPAT: "CIRCLE*" -> (input)_o.lst, "SKY_CIRCLE*" -> (input)_s.lst.
+
+nodskysub.cl	This task subtract the sky data from object data. The input 
+		     list should be after flatfielding. The sky image should 
+		     already with the object mask. Note that the task 
+		     interactively sets the 'sky region' by imexam.
+
+nodreduce.cl	The all-in-one nod-data reduction task similar to mcsall.cl.
+		See the MCSRED2_skynod_reduce.txt for more detail.
+
+
+2018-11-15
+mcsgeocorr.cl	A bug fix: custom-made mask is also distortion corrected and 
+		  attached to crrej- case too. And also, some minor update on 
+		  norregion and code cleaning.
+
+gmkgtrimages.cl	Minor: rejection sigma has changed from 2.5 to 2.0.
+
+nodreduce.cl	Check process for "rgc"//rnsb//"2_all.lst" is added on proc 5.
+
+
+2018-11-17
+statcheck.cl	The fhead parameter is added for more flexibility. 
+
+
+2018-12-30
+psfestimate.cl	Total number of input catalogs are added to output.
+
+
+2019-01-17 -- 20
+mcsall.cl,qobjmask.cl,mcsimsurfit.cl,allskysub.cl, colpatsub.cl, sectcombsub.cl, lcpatsub.cl:
+		The parameters "ch2rail" and "ch2rsize" are added due to the trouble on the ch2 rail vignetting. Some inconsistent rail size handling are also revised.
+
+2019-01-20 to 22
+ana_jan19.cfg,mask2_jan19.pl,gcmask1_jan19.pl
+		The ch2 rail vignetting region is now added to the masks.
+		The new (temporal) config file features these masks.
+
+Configpars have to be updated for the data in Jan 2019.
+
+mcsall.cl  	The step4 is forced to ch2rail=no (and rail=no), while the other processes the ch2rail is kept same as input value.
+
+gmkgtrimages.cl The ch2 rail vignetting region is properly handled. bug fix.
+
+# temporarily opened for sokendai.
+### 
+
+2019-03-22
+ql2dcr.cl	in ETC/mcsfcs2/. A bug fix. config parameter is not necessary now.
+
+
+2019-05-03
+listprep.cl	The testdel parameter is added to reomve frames with 
+		  DATA-TYP=TEST in the list.
+
+2019-06-20	
+listprep.cl		A bug fix for testdel=no case.
+
+
+2019-09-18
+listprep.cl	A minor bug fix.
+	
+checkwdither.cl	A bug fix: revised for different PA case.
+
+2019-10-01
+DATABASE/ana_mar19.cfg	The content is the same as ana_oct19.cfg but explicitly added. The description for the header is slightly changed.
+configpars.par is updated to use mar19.cfg as a default.
+
+
+2020-06-19
+ETC/mcsfcs2/ql2dcr.cl	The parts execuging the program dcr are changed to $DCRDIR/dcr. This is because IRAF on bash (which is the setting for cda01) seems to ignore the aliases written in .bashrc. Instead, now we have to define the enviromental varialbe $DCRDIR to .bashrc instead. See the header of ql2dcr.cl.
+
+
+2020-07-03
+ETC/mcsfcs2/cf2.cl		Copy of cfichi.cl. Use (and revise) it hereafer. It is also added to login.cl via moircs.ana.			
+
+ETC/mcsfcs2/imql.cl		"disp" parameter is added.
+
+
+2020-07-30
+wcsmosaic.cl	Chaged to generate the exposure map (expmap_*output*.fits).
+
+
+2020-08-11
+mcsall.cl,qobjmask.cl,mcsimsurfit.cl,allskysub.cl, colpatsub.cl, sectcombsub.cl, lcpatsub.cl, gmkgtrimages.cl .... The ch2rail parameter, which handles the rail vignetting issue on the imaging data between Dec2018 to Jan 2019, is set to NO.
+
+2020-08-15
+mcsall.cl	Constant Sky subtraction part (in process 4) is updated.
+		The check part for pre-existed files (cl*lst: in step 4) is 
+		 updated.
+		Too-long comment line in the header is reduced. It seems IRAF has maximum allowable comment line. 
+
+mcsgeocorr.cl	A minor revision. Functionally no change.
+
+wcsmosaic.cl    The "moresky" parameter is added. If yes, it will measure the residual constant sky and subtract it from the original.
+		
+2020-08-17	
+wcsmosaic.cl	If the output image already exists, it and mask and expmap will all be explicitly deleted.
+
+plsatellite.cl	In ETC/. Moved from old MCSRED for use. Still primitive.
+
